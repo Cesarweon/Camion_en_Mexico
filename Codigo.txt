@@ -1,7 +1,7 @@
 /*
-@title: Camion en Mexico
+@title: Camión en México
 @author: Cesar Garnica
-@tags: []
+@tags: [levels,]
 @addedOn:
 */
 
@@ -19,6 +19,44 @@ const tu_lugar = "t"
 const compas_de_ruta= "b"
 const fondo = "f"
 const genteesperando = "e" 
+const collectUsuario =  tune`
+500: B5~500,
+15500`
+const collectViejito = tune`
+500: F5~500,
+15500`
+const collecAsaltante = tune`
+500: B5/500,
+15500`
+const collectGandalla = tune`
+500: F5^500,
+15500`
+const chocar = tune`
+500: C5~500,
+500: B4~500,
+500: A4~500,
+14500`
+const win = tune`
+500: C5~500,
+500: D5~500,
+500: E5~500,
+500: E5~500,
+500: F5~500,
+500: D5~500,
+500: C5~500,
+12500`
+const collectChecador = tune`
+500: A5~500,
+15500`
+const lose = tune`
+500: A4^500,
+500: G4^500,
+500: F4^500,
+500: E4^500,
+500: D4^500,
+500: C4^500,
+13000`
+
 setLegend(
   [ player, bitmap`
 ................
@@ -281,3 +319,88 @@ aw......w
 vw...wa.w
 w..w..w..
 p..wa.uwu`,
+   map`
+p.w.....v.g
+w..w.......
+.wv....ww..
+..........r
+.w...w.w...
+.ww.uw..w..
+u....w....u
+...........
+wwww....www
+....ua..w.w
+v....c....a`,
+    map`
+uw*..w.....p
+.....wu.....
+.....w......
+wwww.wa..wv.
+g..a.w..w..r
+.......wu.w.
+vw........a.
+wuw......www
+w.w...w.....
+w.w.w..w...u
+w.w....aw...
+a....u...w.c`,
+   map`
+pw..*.w.....
+.w....w.....
+.w....w.....
+....v...u..c
+.........w..
+www......w..
+v.......ow..`,
+   map`
+p.wt.b.b.b.w
+..w........w
+..wwwww..www
+e...........
+e..........r
+e....eeeeee.`,
+];
+
+const currentLevel = levels[level];
+setMap(currentLevel);
+
+
+setSolids([player,wall,river,antiguo,raro,compas_de_ruta,genteesperando])
+
+
+setPushables({
+  [ player ]: []
+});
+
+onInput("s", () => {
+  getFirst(player).y += 1
+})
+
+onInput("w", () => {
+  getFirst(player).y -= 1
+})
+
+onInput("d", () => {
+  getFirst(player).x += 1
+})
+
+onInput("a", () => {
+  getFirst(player).x -= 1
+})
+
+afterInput(() => {
+  const playerSprite = getFirst(player);
+  const checkpointSprite = getFirst(checa_rutas); 
+  
+  if (playerSprite && checkpointSprite) {
+    if (playerSprite.x === checkpointSprite.x && playerSprite.y === checkpointSprite.y) {
+      level++; 
+      playTune (collectChecador);
+      const newLevel = levels[level];
+      
+      if (newLevel) {
+        setMap(newLevel); 
+      }
+    }
+  }
+});
