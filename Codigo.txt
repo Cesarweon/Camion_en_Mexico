@@ -304,7 +304,6 @@ setLegend(
 setBackground(fondo)
 
 var score = 0
-
 addText(`Dinero: ${score}`,{x: 0, y: 0, color: color`5`})
 
 let level = 0 ;
@@ -386,7 +385,22 @@ onInput("d", () => {
 
 onInput("a", () => {
   getFirst(player).x -= 1
-})
+});
+
+afterInput(() => {
+  const playerSprite = getFirst(player);
+  const usuarioSprite = getAll(usuario); 
+  
+  if (playerSprite && usuarioSprite) {
+    if (playerSprite.x === usuarioSprite.x && playerSprite.y === usuarioSprite.y) {
+      playTune (collectUsuario);
+      score +=1;
+      playTune (collectUsuario);
+      addText(`Dinero: ${score}`,{x: 0, y: 0, color: color`5`});
+      usuarioSprite.remove();
+    }
+  }
+});
 
 afterInput(() => {
   const playerSprite = getFirst(player);
@@ -404,3 +418,19 @@ afterInput(() => {
     }
   }
 });
+
+let dineroText = addText(`Dinero: ${score}`, { x: 0, y: 0, color: color`5` });
+onInput("j", () => {
+level=0
+const newLevel = levels[level];
+  
+  if (newLevel) {
+    setMap(newLevel); 
+    clearText(7, 8); 
+    clearText(1, 10);
+  }
+
+});
+
+
+function resetGame(){
