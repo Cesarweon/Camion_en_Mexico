@@ -1,5 +1,5 @@
 Camión en México es un juego en el motor
-de sprig esta basado en mi experiencia (de toda mi 
+de Sprig, esta basado en mi experiencia (de toda mi 
 vida desde que tengo memoria) usando el transporte público 
 de mi país. No es como quisiera para mostralo 
 de mejor manera, pero es suficiente.
