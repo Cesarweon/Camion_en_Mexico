@@ -10,7 +10,7 @@ no te quiten el dinero de los pasajes
 los pasajeros jovenes dan 1 punto ($10 pesos), los viejitos 0.5 
 puntos ellos pagan medio pasaje ($5 pesos), los asaltantes 
 te quitan 2 puntos (deberia ser todo son bien ratas, pero 
-seria injusto en el juego) y los que les llamo checador gandalla (gorra roja) solo 1 punto y tienes que llegar con el checa rutas (gorra azul) para avanzar de nivel.Hay obstáculos como los otros camiones que pierdes directamente si chocas con ellos ya que si chocas en un camion pues adiós pocas veces te salvas.Ganas el juego si llegas al final con almenos 5 puntos y pierdes si te quedas en numeros negativos o si llegas al final con 0 puntos.
+seria injusto en el juego) y los que les llamo checador gandalla (gorra roja) aun no se que con ellos XD y tienes que llegar con el checa rutas (gorra azul) para avanzar de nivel, pero debes tener un minimo de dos puntos si no que chamba tienes.Hay obstáculos como los otros camiones que te llevan al inicio del nivel si chocas con ellos. El juego consta de 6 nivele y ganas el juego si llegas al final con almenos 7 puntos y pierdes si llegas al final con menos de 7 puntos.
 
 Este eres tu
 ![sprite](https://github.com/user-attachments/assets/336f4a04-364f-42da-890c-f1c5f13c4a95)
