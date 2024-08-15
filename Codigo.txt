@@ -1,6 +1,6 @@
 /*
 @title: Camion en Mexico
-@author: Cesar Garnica
+@author: Cesar Garnicaj
 @tags: []
 @addedOn:
 */
@@ -19,6 +19,45 @@ const tu_lugar = "t"
 const compas_de_ruta= "b"
 const fondo = "f"
 const genteesperando = "e" 
+const collectUsuario = tune`
+500: G5~500,
+15500`
+const collectViejito = tune`
+500: D5~500,
+15500`
+const collectChecador = tune`
+500: B5~500,
+15500`
+const collectAsaltante = tune`
+500: B5-500,
+15500`
+const win = tune`
+500: C5~500,
+500: D5~500,
+500: E5~500,
+500: F5~500,
+500: E5~500,
+500: D5~500,
+500: E5~500,
+500: D5~500,
+500: C5~500,
+11500`
+const lose = tune`
+500: C5~500,
+500: B4~500,
+500: A4~500,
+500: G4~500,
+500: A4~500,
+500: B4~500,
+500: A4~500,
+500: G4~500,
+500: A4~500,
+500: B4~500,
+11000`
+const choque = tune`
+500,
+500: G5/500 + A5/500,
+15000`
 setLegend(
   [ player, bitmap`
 ................
@@ -284,26 +323,26 @@ p..wa.uwu`,
    map`
 p.w.....v.g
 w..w.......
-.wv....ww..
+.wv...rww..
 ..........r
 .w...w.w...
 .ww.uw..w..
 u....w....u
-...........
-wwww....www
+o..........
+wwwwo...www
 ....ua..w.w
 v....c....a`,
     map`
 uw*..w.....p
 .....wu.....
-.....w......
+............
 wwww.wa..wv.
-g..a.w..w..r
-.......wu.w.
-vw........a.
-wuw......www
+g..a..w.w.ww
+.......wu..v
+vw..o.....a.
+wuw...o..www
 w.w...w.....
-w.w.w..w...u
+w.w.w..w*..u
 w.w....aw...
 a....u...w.c`,
    map`
@@ -311,16 +350,26 @@ pw..*.w.....
 .w....w.....
 .w....w.....
 ....v...u..c
-.........w..
+*........w..
 www......w..
 v.......ow..`,
+   map`
+ca...u*u...g
+...........w
+.aw.*.....w*
+..w.....a...
+.uw..rwwww.v
+..w.........
+..wv...a....
+............
+uo.a..uwww.p`,
    map`
 p.wt.b.b.b.w
 ..w........w
 ..wwwww..www
 e...........
 e..........r
-e....eeeeee.`,
+eo...eeeeee.`,
 ];
 
 const currentLevel = levels[level];
@@ -357,6 +406,7 @@ onInput("a", () => {
 let dineroText = addText(`Dinero: ${score}`, { x: 0, y: 0, color: color`5` });
 onInput("j", () => {
 level=0
+score=0  
 const newLevel = levels[level];
   
   if (newLevel) {
@@ -373,7 +423,8 @@ afterInput(() => {
   
   if (playerSprite && checkpointSprite) {
     if (playerSprite.x === checkpointSprite.x && playerSprite.y === checkpointSprite.y) {
-      if ( score >= 1 ) {
+      if ( score >= 2 ) {
+      playTune(collectChecador);
       level++; 
       const newLevel = levels[level];
       
@@ -386,6 +437,7 @@ afterInput(() => {
 });
 afterInput(() => {
  if (tilesWith(usuario, player).length >= 1) {
+   playTune(collectUsuario);
   score += 1
    
 }
@@ -394,6 +446,7 @@ afterInput(() => {
 
 afterInput(() => {
  if (tilesWith(viejito, player).length >= 1) {
+    playTune(collectViejito);
   score += 0.5
    
 }
@@ -402,6 +455,7 @@ afterInput(() => {
 
 afterInput(() => {
  if (tilesWith(asaltante, player).length >= 1) {
+    playTune(collectAsaltante);
   score -= 2
 }
   updateText()
@@ -411,9 +465,22 @@ afterInput(() => {
   const playerSprite = getFirst(player);
   const winSprite = getFirst(tu_lugar); 
   
-  if (playerSprite && winSprite) {
+  if (playerSprite && winSprite && score >= 7) {
     if (playerSprite.x === winSprite.x && playerSprite.y === winSprite.y) {
+      playTune(win);
       addText("You win!", { x: 7, y: 8, color: color`4` }); 
+      addText("Press j to restart", { x: 1, y: 10, color: color`6` }); 
+    }
+  }
+});
+afterInput(() => {
+  const playerSprite = getFirst(player);
+  const winSprite = getFirst(tu_lugar); 
+  
+  if (playerSprite && winSprite && score < 7) {
+    if (playerSprite.x === winSprite.x && playerSprite.y === winSprite.y) {
+      playTune(lose);
+      addText("You lose!", { x: 6, y: 8, color: color`3` }); 
       addText("Press j to restart", { x: 1, y: 10, color: color`6` }); 
     }
   }
@@ -424,6 +491,7 @@ afterInput(() => {
     
     if (choque.length > 0) {
         setMap(levels[level])
+       
     }
 })
 afterInput(() => {
@@ -442,5 +510,4 @@ afterInput(() => {
         setMap(levels[level])
     }
 })
-          
 
