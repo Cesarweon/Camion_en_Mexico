@@ -1,7 +1,7 @@
 /*
-@title: Camión en México
+@title: Camion en Mexico
 @author: Cesar Garnica
-@tags: [levels,]
+@tags: []
 @addedOn:
 */
 
@@ -19,44 +19,6 @@ const tu_lugar = "t"
 const compas_de_ruta= "b"
 const fondo = "f"
 const genteesperando = "e" 
-const collectUsuario =  tune`
-500: B5~500,
-15500`
-const collectViejito = tune`
-500: F5~500,
-15500`
-const collecAsaltante = tune`
-500: B5/500,
-15500`
-const collectGandalla = tune`
-500: F5^500,
-15500`
-const chocar = tune`
-500: C5~500,
-500: B4~500,
-500: A4~500,
-14500`
-const win = tune`
-500: C5~500,
-500: D5~500,
-500: E5~500,
-500: E5~500,
-500: F5~500,
-500: D5~500,
-500: C5~500,
-12500`
-const collectChecador = tune`
-500: A5~500,
-15500`
-const lose = tune`
-500: A4^500,
-500: G4^500,
-500: F4^500,
-500: E4^500,
-500: D4^500,
-500: C4^500,
-13000`
-
 setLegend(
   [ player, bitmap`
 ................
@@ -304,7 +266,8 @@ setLegend(
 setBackground(fondo)
 
 var score = 0
-addText(`Dinero: ${score}`,{x: 0, y: 0, color: color`5`})
+const dineroTexto = addText(`Dinero: ${score}`, { x: 0, y: 0, color: color`5` });
+addText(`Dinero: ${score}`,{x: 0, y: 0, color: color`5`});
 
 let level = 0 ;
 const levels = [
@@ -364,12 +327,16 @@ const currentLevel = levels[level];
 setMap(currentLevel);
 
 
-setSolids([player,wall,river,antiguo,raro,compas_de_ruta,genteesperando])
+setSolids([player,wall,compas_de_ruta,genteesperando])
 
 
 setPushables({
   [ player ]: []
 });
+function updateText() {
+ clearText(); 
+ addText(`Dinero: ${score}`, { x: 0, y: 0, color: color`5` }); 
+}
 
 onInput("s", () => {
   getFirst(player).y += 1
@@ -385,39 +352,7 @@ onInput("d", () => {
 
 onInput("a", () => {
   getFirst(player).x -= 1
-});
-
-afterInput(() => {
-  const playerSprite = getFirst(player);
-  const usuarioSprite = getAll(usuario); 
-  
-  if (playerSprite && usuarioSprite) {
-    if (playerSprite.x === usuarioSprite.x && playerSprite.y === usuarioSprite.y) {
-      playTune (collectUsuario);
-      score +=1;
-      playTune (collectUsuario);
-      addText(`Dinero: ${score}`,{x: 0, y: 0, color: color`5`});
-      usuarioSprite.remove();
-    }
-  }
-});
-
-afterInput(() => {
-  const playerSprite = getFirst(player);
-  const checkpointSprite = getFirst(checa_rutas); 
-  
-  if (playerSprite && checkpointSprite) {
-    if (playerSprite.x === checkpointSprite.x && playerSprite.y === checkpointSprite.y) {
-      level++; 
-      playTune (collectChecador);
-      const newLevel = levels[level];
-      
-      if (newLevel) {
-        setMap(newLevel); 
-      }
-    }
-  }
-});
+})
 
 let dineroText = addText(`Dinero: ${score}`, { x: 0, y: 0, color: color`5` });
 onInput("j", () => {
@@ -427,10 +362,85 @@ const newLevel = levels[level];
   if (newLevel) {
     setMap(newLevel); 
     clearText(7, 8); 
-    clearText(1, 10);
+    clearText(0, 10);
   }
 
 });
 
+afterInput(() => {
+  const playerSprite = getFirst(player);
+  const checkpointSprite = getFirst(checa_rutas); 
+  
+  if (playerSprite && checkpointSprite) {
+    if (playerSprite.x === checkpointSprite.x && playerSprite.y === checkpointSprite.y) {
+      if ( score >= 1 ) {
+      level++; 
+      const newLevel = levels[level];
+      
+      if (newLevel) {
+          setMap(newLevel); 
+        }
+      }
+    }
+  }
+});
+afterInput(() => {
+ if (tilesWith(usuario, player).length >= 1) {
+  score += 1
+   
+}
+  updateText()
+})
 
-function resetGame(){
+afterInput(() => {
+ if (tilesWith(viejito, player).length >= 1) {
+  score += 0.5
+   
+}
+  updateText()
+})
+
+afterInput(() => {
+ if (tilesWith(asaltante, player).length >= 1) {
+  score -= 2
+}
+  updateText()
+})
+
+afterInput(() => {
+  const playerSprite = getFirst(player);
+  const winSprite = getFirst(tu_lugar); 
+  
+  if (playerSprite && winSprite) {
+    if (playerSprite.x === winSprite.x && playerSprite.y === winSprite.y) {
+      addText("You win!", { x: 7, y: 8, color: color`4` }); 
+      addText("Press j to restart", { x: 1, y: 10, color: color`6` }); 
+    }
+  }
+});
+afterInput(() => {
+    
+    const choque = tilesWith(player, river);
+    
+    if (choque.length > 0) {
+        setMap(levels[level])
+    }
+})
+afterInput(() => {
+    
+    const choque = tilesWith(player, antiguo);
+    
+    if (choque.length > 0) {
+        setMap(levels[level])
+    }
+})
+afterInput(() => {
+    
+    const choque = tilesWith(player, raro);
+    
+    if (choque.length > 0) {
+        setMap(levels[level])
+    }
+})
+          
+
