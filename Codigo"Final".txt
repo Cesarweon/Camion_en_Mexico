@@ -1,9 +1,17 @@
 /*
-@title: Camion en Mexico
-@author: Cesar Garnicaj
-@tags: []
-@addedOn:
+@title: Camión en México
+@author: Cesar Garnica
+@tags: [levels, maze]
+@addedOn:09/08/2024
 */
+/*The goal is to reach the end with a minimum amount of money. To advance to the next level, 
+you must reach it with the blue-capped stickman with at least 3 points. There are 
+three other types of stickman: the normal one gives 1 point, the one with the clubs gives 0.5 points,
+and the one with red eyes subtracts 1 point. The other buses (red, yellow, and blue) 
+will send you back to the beginning of the level you are in.*/
+
+/*It's very easy once you realize all the mistakes I didn't fix, but it's the best I could do; 
+it's my first time writing code in JavaScript.*/
 
 const player = "p"
 const wall = "w"
@@ -310,7 +318,7 @@ addText(`Dinero: ${score}`,{x: 0, y: 0, color: color`5`});
 
 let level = 0 ;
 const levels = [
-  map`
+   map`
 .wwwwu..g
 c..wuw..w
 ww.....wv
@@ -320,7 +328,7 @@ aw......w
 vw...wa.w
 w..w..w..
 p..wa.uwu`,
-   map`
+  map`
 p.w.....v.g
 w..w.......
 .wv...rww..
@@ -332,6 +340,19 @@ o..........
 wwwwo...www
 ....ua..w.w
 v....c....a`,
+   map`
+uw*..w.....p
+.....wu.....
+............
+wwww.wa..wv.
+g..a..w.w.ww
+.......wu..v
+vw..o.....a.
+wuw...o..www
+w.w...w.....
+w.w.w..w*..u
+w.w....aw...
+a....u...w.c`,
     map`
 uw*..w.....p
 .....wu.....
@@ -346,13 +367,28 @@ w.w.w..w*..u
 w.w....aw...
 a....u...w.c`,
    map`
-pw..*.w.....
+pw..*.w.u...
 .w....w.....
-.w....w.....
-....v...u..c
-*........w..
+.w...ww..ww.
+....vw.....c
+*.....w..w..
 www......w..
-v.......ow..`,
+v.......owu.`,
+   map`
+*w..wv.a......
+.w..w.w.......
+.w..w..w..*..a
+.w..w.u.w.....
+....w....w.w..
+.w.uw.v....rw.
+......wwwwwwc.
+.w..w....*.uw.
+.w..w......w..
+.wa.wa..w.....
+.w..w..wu.a.w.
+.w..w..uw...w.
+.w..w.www...w.
+pwou.v....v..r`,
    map`
 ca...u*u...g
 ...........w
@@ -386,6 +422,11 @@ function updateText() {
  clearText(); 
  addText(`Dinero: ${score}`, { x: 0, y: 0, color: color`5` }); 
 }
+function removeSprite(player,viejito) {
+  if(tilesWith(sprite,player).length >= 1) {
+    sprite.remove();
+  }
+}  
 
 onInput("s", () => {
   getFirst(player).y += 1
@@ -403,6 +444,7 @@ onInput("a", () => {
   getFirst(player).x -= 1
 })
 
+  
 let dineroText = addText(`Dinero: ${score}`, { x: 0, y: 0, color: color`5` });
 onInput("j", () => {
 level=0
@@ -423,7 +465,7 @@ afterInput(() => {
   
   if (playerSprite && checkpointSprite) {
     if (playerSprite.x === checkpointSprite.x && playerSprite.y === checkpointSprite.y) {
-      if ( score >= 2 ) {
+      if ( score >= 3 ) {
       playTune(collectChecador);
       level++; 
       const newLevel = levels[level];
@@ -447,10 +489,11 @@ afterInput(() => {
 afterInput(() => {
  if (tilesWith(viejito, player).length >= 1) {
     playTune(collectViejito);
-  score += 0.5
+  score += 0.5;
    
 }
   updateText()
+
 })
 
 afterInput(() => {
@@ -465,7 +508,7 @@ afterInput(() => {
   const playerSprite = getFirst(player);
   const winSprite = getFirst(tu_lugar); 
   
-  if (playerSprite && winSprite && score >= 7) {
+  if (playerSprite && winSprite && score >= 10) {
     if (playerSprite.x === winSprite.x && playerSprite.y === winSprite.y) {
       playTune(win);
       addText("You win!", { x: 7, y: 8, color: color`4` }); 
@@ -477,7 +520,7 @@ afterInput(() => {
   const playerSprite = getFirst(player);
   const winSprite = getFirst(tu_lugar); 
   
-  if (playerSprite && winSprite && score < 7) {
+  if (playerSprite && winSprite && score < 10) {
     if (playerSprite.x === winSprite.x && playerSprite.y === winSprite.y) {
       playTune(lose);
       addText("You lose!", { x: 6, y: 8, color: color`3` }); 
@@ -499,7 +542,7 @@ afterInput(() => {
     const choque = tilesWith(player, antiguo);
     
     if (choque.length > 0) {
-        setMap(levels[level])
+        setMap(levels[level]);
     }
 })
 afterInput(() => {
